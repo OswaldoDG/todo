@@ -6,6 +6,11 @@ const todoStats = document.getElementById('todo-stats');
 const statsText = document.getElementById('stats-text');
 const clearCompleted = document.getElementById('clear-completed');
 const themeToggle = document.getElementById('theme-toggle');
+const standupBtn = document.getElementById('standup-btn');
+const standupDialog = document.getElementById('standup-dialog');
+const standupClose = document.getElementById('standup-close');
+const standupContent = document.getElementById('standup-content');
+const standupCopy = document.getElementById('standup-copy');
 
 // Theme persistence
 const savedTheme = localStorage.getItem('theme') || 'light';
@@ -124,6 +129,92 @@ form.addEventListener('submit', (event) => {
   input.value = '';
   input.focus();
   renderTodos();
+});
+
+function generateStandupText() {
+  const done = todos.filter((t) => t.completed);
+  const planned = todos.filter((t) => !t.completed);
+  const date = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const lines = [`📅 Standup — ${date}`, ''];
+
+  lines.push('✅ Done:');
+  if (done.length > 0) {
+    done.forEach((t) => lines.push(`  • ${t.text}`));
+  } else {
+    lines.push('  (nothing completed yet)');
+  }
+
+  lines.push('');
+  lines.push('🔜 Planned:');
+  if (planned.length > 0) {
+    planned.forEach((t) => lines.push(`  • ${t.text}`));
+  } else {
+    lines.push('  (no pending tasks)');
+  }
+
+  return lines.join('\n');
+}
+
+function openStandup() {
+  const done = todos.filter((t) => t.completed);
+  const planned = todos.filter((t) => !t.completed);
+  const date = new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+  const section = (emoji, label, items, emptyMsg) => {
+    const heading = document.createElement('h3');
+    heading.className = 'standup-section-heading';
+    heading.textContent = `${emoji} ${label}`;
+
+    const ul = document.createElement('ul');
+    ul.className = 'standup-list';
+
+    if (items.length > 0) {
+      items.forEach((t) => {
+        const li = document.createElement('li');
+        li.textContent = t.text;
+        ul.appendChild(li);
+      });
+    } else {
+      const li = document.createElement('li');
+      li.className = 'standup-empty';
+      li.textContent = emptyMsg;
+      ul.appendChild(li);
+    }
+
+    const wrap = document.createElement('div');
+    wrap.className = 'standup-section';
+    wrap.append(heading, ul);
+    return wrap;
+  };
+
+  standupContent.innerHTML = '';
+
+  const dateEl = document.createElement('p');
+  dateEl.className = 'standup-date';
+  dateEl.textContent = date;
+  standupContent.appendChild(dateEl);
+
+  standupContent.appendChild(section('✅', 'Done', done, 'Nothing completed yet'));
+  standupContent.appendChild(section('🔜', 'Planned', planned, 'No pending tasks'));
+
+  standupCopy.textContent = 'Copy to clipboard';
+  standupDialog.showModal();
+}
+
+standupBtn.addEventListener('click', openStandup);
+
+standupClose.addEventListener('click', () => standupDialog.close());
+
+standupDialog.addEventListener('click', (e) => {
+  if (e.target === standupDialog) standupDialog.close();
+});
+
+standupCopy.addEventListener('click', () => {
+  navigator.clipboard.writeText(generateStandupText()).then(() => {
+    standupCopy.textContent = '✓ Copied!';
+    setTimeout(() => { standupCopy.textContent = 'Copy to clipboard'; }, 2000);
+  });
 });
 
 renderTodos();

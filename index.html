@@ -28,8 +28,22 @@
 
       <div id="todo-stats" class="todo-stats" hidden>
         <span id="stats-text"></span>
-        <button type="button" id="clear-completed" class="clear-btn">Clear completed</button>
+        <div class="stats-actions">
+          <button type="button" id="standup-btn" class="clear-btn standup-btn">📋 Standup</button>
+          <button type="button" id="clear-completed" class="clear-btn">Clear completed</button>
+        </div>
       </div>
+
+      <dialog id="standup-dialog" class="standup-dialog" aria-labelledby="standup-title">
+        <div class="standup-header">
+          <h2 id="standup-title">Daily Standup</h2>
+          <button type="button" id="standup-close" class="standup-close" aria-label="Close standup">×</button>
+        </div>
+        <div id="standup-content" class="standup-content"></div>
+        <div class="standup-footer">
+          <button type="button" id="standup-copy" class="standup-copy-btn">Copy to clipboard</button>
+        </div>
+      </dialog>
 
       <ul id="todo-list" class="todo-list" aria-live="polite" aria-label="Todo items"></ul>
 
