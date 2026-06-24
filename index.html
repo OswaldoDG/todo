@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Todo App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
@@ -11,17 +14,29 @@
   <main class="app">
     <section class="todo-card" aria-labelledby="todo-title">
       <p class="eyebrow">Daily list</p>
-      <h1 id="todo-title">Todo App</h1>
-      <p class="subtitle">Add tasks, keep track of them, and remove them when you're done.</p>
+      <h1 id="todo-title">My Tasks</h1>
+      <p class="subtitle">Stay organised — add tasks, check them off, and clear what's done.</p>
 
       <form id="todo-form" class="todo-form" autocomplete="off">
         <label class="sr-only" for="todo-input">New todo</label>
-        <input id="todo-input" type="text" placeholder="Write a new todo" maxlength="120" />
-        <button type="submit">Add</button>
+        <input id="todo-input" type="text" placeholder="What needs to be done?" maxlength="120" />
+        <button type="submit">
+          <span class="btn-icon" aria-hidden="true">+</span>
+          <span class="btn-label">Add</span>
+        </button>
       </form>
 
+      <div id="todo-stats" class="todo-stats" hidden>
+        <span id="stats-text"></span>
+        <button type="button" id="clear-completed" class="clear-btn">Clear completed</button>
+      </div>
+
       <ul id="todo-list" class="todo-list" aria-live="polite" aria-label="Todo items"></ul>
-      <p id="empty-state" class="empty-state">No todos yet. Add one above.</p>
+
+      <div id="empty-state" class="empty-state">
+        <span class="empty-icon" aria-hidden="true">📋</span>
+        <p class="empty-text">No tasks yet. Add one above!</p>
+      </div>
     </section>
   </main>
 
