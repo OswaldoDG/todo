@@ -2,6 +2,21 @@ const form = document.getElementById('todo-form');
 const input = document.getElementById('todo-input');
 const list = document.getElementById('todo-list');
 const emptyState = document.getElementById('empty-state');
+const themeToggle = document.getElementById('theme-toggle');
+
+// Theme persistence
+const savedTheme = localStorage.getItem('theme') || 'light';
+document.documentElement.dataset.theme = savedTheme;
+themeToggle.textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+themeToggle.addEventListener('click', () => {
+  const isDark = document.documentElement.dataset.theme === 'dark';
+  const next = isDark ? 'light' : 'dark';
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem('theme', next);
+  themeToggle.textContent = next === 'dark' ? '☀️' : '🌙';
+  themeToggle.setAttribute('aria-label', next === 'dark' ? 'Switch to light mode' : 'Switch to dark mode');
+});
 
 const todos = [];
 
